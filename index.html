@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="./style.css" />
+    <script async defer>
+      let departureAutocomplete;
+      let arrivalAutocomplete;
+      function initAutocomplete() {
+        departureAutocomplete = new google.maps.places.Autocomplete(
+          document.getElementById("select-trip__address-departure-input"),
+          {
+            type: ["establishment"],
+            componentRestrictions: { country: ["FR", "IT"] },
+            fields: ["place_id", "name"],
+          }
+        );
+        window.departureAutocomplete = departureAutocomplete;
+        arrivalAutocomplete = new google.maps.places.Autocomplete(
+          document.getElementById("select-trip__address-arrival-input"),
+          {
+            type: ["establishment"],
+            componentRestrictions: { country: ["FR", "IT"] },
+            fields: ["place_id", "name"],
+          }
+        );
+        window.arrivalAutocomplete = arrivalAutocomplete;
+      }
+    </script>
+  </head>
+  <main>
+    <div class="module">
+      <!-- CHOOSE A TRIP STATE -->
+      <div id="select-trip" class="active">
+        <!-- Button tabs -->
+        <div class="tabs">
+          <button class="tab active" id="select-trip__transfer-tab">Transfert</button>
+          <button class="tab" id="select-trip__hourly-tab">A l'heure</button>
+        </div>
+
+        <!-- Hourly form -->
+        <form id="select-trip__hourly-form" class="form-content">
+          <span>a l'heure</span>
+        </form>
+
+        <!-- Transfer form -->
+        <form id="select-trip__transfer-form" class="form-content active">
+          <!-- Departure input -->
+          <div class="field" id="select-trip__transfer-form__field-departure">
+            <label for="from" class="titre-field">Adresse de départ</label>
+            <div class="input-container" id="select-trip__input-departure-container">
+              <input
+                type="text"
+                name="inputDepart"
+                id="select-trip__address-departure-input"
+                class="main-input"
+              />
+            </div>
+            <div class="checkboxes">
+              <label for="aeroport">Aéroports</label>
+              <input type="checkbox" name="aeroports" id="select-trip__airport-departure-cb" />
+              <label for="gares">Gares</label>
+              <input type="checkbox" name="gares" id="select-trip__train-departure-cb" />
+              <label for="adresse">Adresse</label>
+              <input type="checkbox" name="adresse" id="select-trip__address-departure-cb" />
+            </div>
+          </div>
+
+          <!-- Arrival input -->
+          <div class="field" id="select-trip__field-arrivee">
+            <label for="from" class="titre-field">Adresse d'arrivée</label>
+            <div class="input-container" id="select-trip__arrival-input-container">
+              <input
+                type="text"
+                name="inputArrivee"
+                id="select-trip__address-arrival-input"
+                class="main-input"
+              />
+            </div>
+            <div class="checkboxes">
+              <label for="aeroport">Aéroports</label>
+              <input
+                type="checkbox"
+                name="aeroports"
+                id="select-trip__airport-arrival-cb"
+              />
+              <label for="gares">Gares</label>
+              <input type="checkbox" name="gares" id="select-trip__train-arrival-cb" />
+              <label for="adresse">Adresse</label>
+              <input type="checkbox" name="adresse" id="select-trip__address-arrival-cb" />
+            </div>
+          </div>
+          <!-- Date input -->
+          <div class="field" id="select-trip__field-date">
+            <label for="date-input">Date</label>
+            <input type="date" id="select-trip__date-input" name="inputDate" />
+            <div id="select-trip__date-placeholder"></div>
+          </div>
+          <!-- Time input -->
+          <div class="field" id="select-trip__field-time">
+            <label for="time-input">Heure</label>
+            <input type="time" id="select-trip__time-input" name="inputTime" />
+            <div id="select-trip__time-placeholder">test</div>
+          </div>
+          <!-- Vehicule input -->
+          <div class="field" id="select-trip__vehicule-field">
+            <span class="titre-field">Type de véhicule</span>
+            <div class="checkboxes">
+              <label for="type-vehicule-berline">Berline</label>
+              <input
+                type="checkbox"
+                name="berlineInput"
+                id="select-trip__type-berline-input"
+              />
+              <label for="type-vehicule-van">Van</label>
+              <input type="checkbox" name="vanInput" id="select-trip__type-van-input" />
+            </div>
+          </div>
+          <!-- Button -->
+          <button style="margin-top: 20px">Estimer</button>
+        </form>
+      </div>
+
+      <!-- SUMMARY STATE -->
+      <div id="summary">
+        <!-- Title -->
+        <h2 style="margin: 0 0 40px 0">Récapitulatif</h2>
+        <!-- Trip  -->
+        <div id="summary__trip" style="margin-bottom: 40px">
+          <span id="summary__trip__from">Nice</span>
+          <span id="summary__trip__to">Saint-Tropez</span>
+        </div>
+        <!-- Estimated duration -->
+        <div id="summary__estimated-duration">
+          Temps estimé: <span id="summary__estimated-time__value">1h30</span>
+        </div>
+        <!-- Vehicule's picture -->
+        <div id="summary__vehicule-picture" style="margin: 40px 0">
+          Berline picture
+        </div>
+        <!-- Price -->
+        <span id="summary__price" style="margin-bottom: 40px">149€</span>
+        <!-- User details form -->
+        <form id="summary__form">
+          <div class="field">
+            <label for="phone">Téléphone</label>
+            <input type="number" name="phone" />
+          </div>
+          <div class="field">
+            <label for="name">Nom et prénom</label>
+            <input type="text" name="name" />
+          </div>
+          <div class="field">
+            <button id="summary__send-request-driver">
+              Envoyer une demande
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+  <script
+    async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZrDD481eT8qnIaP_pdBcf3M5IIO8S73k&libraries=places&callback=initAutocomplete"
+  ></script>
+  <script src="./src/app.js" type="module"></script>
+</html>
