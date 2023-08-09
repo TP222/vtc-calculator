@@ -51,7 +51,7 @@ export default function getGoogleTrip(e) {
             duration,
             date: e.target.inputDate.value,
             time: e.target.inputTime.value,
-            vehicule: document.getElementById("type-vehicule-berline").checked
+            vehicule: document.getElementById("select-trip__type-berline-input").checked
               ? "berline"
               : "van",
           };
